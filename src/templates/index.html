@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Compression</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding:20px; }
+    h1 { text-align:center; }
+    .container { max-width:800px; margin:auto; }
+    .preview-container { display:flex; justify-content:space-between; margin-top: 20px; }
+    .preview { width:45%; text-align:center; }
+    .preview img { width:100%; max-height:300px; object-fit:contain; background:#f0f0f0; }
+    .info { margin-top:20px; font-weight:bold; }
+    .download-btn { margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Image Compression</h1>
+    <form method="POST" action="/compress" enctype="multipart/form-data">
+      <label>Input Your Image</label><br />
+      <input type="file" name="image" required /><br /><br />
+      <label>Image Compression Rate:</label>
+      <input type="number" name="rate" value="50" min="1" max="100" /> %<br /><br />
+      <button type="submit">Compress</button>
+    </form>
+
+    {% if before_filename and after_filename %}
+    <div class="preview-container">
+      <div class="preview">
+        <p>Before</p>
+        <img src="{{ url_for('uploaded_file', filename=before_filename) }}" alt="Before Image" />
+      </div>
+      <div class="preview">
+        <p>After</p>
+        <img src="{{ url_for('static', filename=after_filename) }}" alt="After Image" /><br />
+        <a href="{{ url_for('static', filename=after_filename) }}" download>
+          <button class="download-btn">Download ⬇️</button>
+        </a>
+      </div>
+    </div>
+    <div class="info">
+      <p>Image pixel difference percentage: <strong>{{ diff }}</strong> %</p>
+      <p>Image compression time: {{ time }} seconds</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
